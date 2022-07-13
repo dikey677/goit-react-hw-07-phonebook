@@ -2,25 +2,26 @@ import React from "react";
 import { Ul, Li, Box, Button, P } from "../Contacts/Contacts.styled"
 import { connect } from "react-redux";
 import actions from "../../redux/phonebook/phonebook-actions";
-import { useFetchContactsQuery } from "../../contactsApi";
+import { useFetchContactsQuery, useDeleteContactMutation } from "../../contactsApi";
 
-const Contacts = ({  removeContact }) => {
+const Contacts = () => {
     const { data, isFetching } = useFetchContactsQuery()
+    const [deleteContact] = useDeleteContactMutation()
 
     console.log(data)
 
     return (
             <Box>
-            <Ul>
+                <Ul>
                     {isFetching && <p>Loading...</p>}
                     {data && data.map(contact => {
                         return (
                             <Li key={contact.id}>
                                 <P>{contact.name}: {contact.number}</P>
-                                <Button type="button" onClick={() => removeContact(contact.id)}>Delete</Button>  
+                                <Button type="button" onClick={()=>deleteContact(contact.id)}>Delete</Button>  
                             </Li>
-                        )
-                    })}
+                            )
+                        })}
                 </Ul>
             </Box>
     );
@@ -40,9 +41,5 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    removeContact: (contactId) => dispatch(actions.DeleteContact(contactId)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Contacts)
+export default connect(mapStateToProps)(Contacts)
 

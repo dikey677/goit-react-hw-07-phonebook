@@ -2,9 +2,13 @@ import { FormBox, InputName, InputNumber } from "./Form.styled";
 import { connect } from "react-redux";
 import actions from "../../redux/phonebook/phonebook-actions";
 import { useState } from "react";
+import { useCreateContactMutation } from "../../contactsApi";
 
 
-function Form({onSubmit}) {
+function Form({ onSubmit }) {
+  
+  const [createContact] = useCreateContactMutation();
+
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
 
