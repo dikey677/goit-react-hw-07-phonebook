@@ -1,33 +1,34 @@
 import { createAction } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
+// import { nanoid } from "nanoid";
+import axios from "axios";
+axios.defaults.baseURL = "https://62cd7b1aa43bf780085961d2.mockapi.io/contacts";
 
-//Redux
-// const AddContact = (onSubmit) => ({
-//   type: types.ADD,
-//   payload: {
-//     id: nanoid(10),
-//     ...onSubmit,
-//   },
-// });
+const AddContact = (onSubmit) => (dispatch) => {
+  const item = { ...onSubmit };
 
-// const DeleteContact = (contactId) => ({
-//   type: types.DELETE,
-//   payload: contactId,
-// });
+  dispatch({ type: "phonebook/addContactRequest" });
 
-// const FilterContact = (value) => ({
-//   type: types.FILTER,
-//   payload: value,
-// });
+  axios
+    .post(`/items`, item)
+    .then(({ data }) =>
+      dispatch({ type: "phonebook/addContactSuccess", payload: data })
+    );
+};
 
-//Redux toolkit
-// Вызывается функция createAction, в параметре которой указывается type.Если второй аргумент для действия сложной формы(как AddContact),
-// то он передается как анонимная функция.сли второй аргумент для действия простой формы, то он передается при dispatch
-const AddContact = createAction("phonebook/add", (onSubmit) => {
-  return {
-    payload: { id: nanoid(10), ...onSubmit },
-  };
-});
+// const AddContact = ({ onSubmit }) => {
+//   return async (dispatch) => {
+//     dispatch({ type: "phonebook/addContactRequest" });
+//     const response = await axios.post(`/items`, onSubmit);
+
+//     console.log("Ответ от сервера", response);
+
+//     dispatch({
+//       type: "phonebook/addContactSuccess",
+//       payload: response.data,
+//     });
+//   };
+// };
+
 const DeleteContact = createAction("phonebook/delete");
 const FilterContact = createAction("phonebook/filter");
 
