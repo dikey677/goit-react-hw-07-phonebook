@@ -1,33 +1,20 @@
 import { FormBox, InputName, InputNumber } from "./Form.styled";
-import { connect } from "react-redux";
-import actions from "../../redux/phonebook/phonebook-actions";
 import { useState } from "react";
 import { useCreateContactMutation } from "../../contactsApi";
 
 
-function Form({ onSubmit }) {
-  
-  const [createContact] = useCreateContactMutation();
-
+function Form() {
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
-
+  const [createContact] = useCreateContactMutation();
+   
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    createContact({ name, number });
+    setName('');
+    setNumber('');
+  }
   
-  const handleChangeName = event => {
-    setName(event.currentTarget.value)
-  }
-
-   const handleChangeNumber = event => {
-    setNumber(event.currentTarget.value)
-  }
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    onSubmit({ name, number }); 
-    setName('')
-    setNumber('')
-  }
-
   return (
       <FormBox onSubmit={handleSubmit}>
              Name
@@ -38,7 +25,7 @@ function Form({ onSubmit }) {
                  title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
                  required
                  value={name}
-                 onChange={handleChangeName}
+                 onChange={evt => setName(evt.target.value)}
              />
             
              Number
@@ -49,7 +36,7 @@ function Form({ onSubmit }) {
                  title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                  required
                  value={number}
-                 onChange={handleChangeNumber}
+                 onChange={evt => setNumber(evt.target.value)}
              />
             
         <button type="submit">Add contacts</button>
@@ -57,11 +44,7 @@ function Form({ onSubmit }) {
     )
 }
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: obj => dispatch(actions.AddContact(obj))  
-})
-
-export default connect(null, mapDispatchToProps)(Form)
+export default Form
  
 
 

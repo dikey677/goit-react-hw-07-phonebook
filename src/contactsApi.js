@@ -22,7 +22,7 @@ export const contactsApi = createApi({
       query: (newContact) => ({
         url: "/items",
         method: "POST",
-        body: "newContact",
+        body: newContact,
       }),
       invalidatesTags: ["Item"],
     }),
